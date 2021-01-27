@@ -1,1 +1,1 @@
-# docker-cmp-test
+# AWS deployment test with multiple docker conteners using docker-componse
