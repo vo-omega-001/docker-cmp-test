@@ -5,23 +5,23 @@ services:
   - docker
 
 before_install:
-  - docker build -t voules/react-test -f ./client/Dockerfile.dev ./client
+  - docker build -t ${DOCKER_ID}/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run -e CI=true voules/react-test npm test
+  - docker run -e CI=true ${DOCKER_ID}/react-test npm test
 
 after_success:
-  - docker build -t voules/multi-client ./client
-  - docker build -t voules/multi-nginx  ./nginx
-  - docker build -t voules/multi-server ./server
-  - docker build -t voules/multi-worker ./worker
+  - docker build -t ${DOCKER_ID}/multi-client ./client
+  - docker build -t ${DOCKER_ID}/multi-nginx  ./nginx
+  - docker build -t ${DOCKER_ID}/multi-server ./server
+  - docker build -t ${DOCKER_ID}/multi-worker ./worker
   # Log in to the docker CLI
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_ID}" --password-stdin
   # Take those images and push them to docker hub
-  - docker push voules/multi-client
-  - docker push voules/multi-nginx
-  - docker push voules/multi-server
-  - docker push voules/multi-worker
+  - docker push ${DOCKER_ID}/multi-client
+  - docker push ${DOCKER_ID}/multi-nginx
+  - docker push ${DOCKER_ID}/multi-server
+  - docker push ${DOCKER_ID}/multi-worker
 
 
 deploy:
@@ -34,6 +34,6 @@ deploy:
   bucket_path: 'multi-docker'
   on:
     branch: main
-  access_key_id: $AWS_ACCESS_KEY
-  secret_access_key: $AWS_SECRET_KEY
+  access_key_id: ${AWS_ACCESS_KEY}
+  secret_access_key: ${AWS_SECRET_KEY}
   
